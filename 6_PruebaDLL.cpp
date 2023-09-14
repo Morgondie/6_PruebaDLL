@@ -2,6 +2,7 @@
 //
 #include <Windows.h>
 #include <iostream>
+#include <fstream>
 
 int main()
 {
@@ -20,20 +21,39 @@ int main()
         }
         else
         {
-            typedef double (*sumarFunc)(double a, double b);
-            sumarFunc sumar ) reinterpret_cast<sumarFunc>(GetProcAddress(mydll, "sumar"));
-
-            if (sumar != NULL)
-            {
-                std::cout << "prueba de suma :" << sumar(3.1416, 1.414);
-            }
-
-            FreeLibrary(mydll);
+            puts("  Error en la operacion");
         }
+        typedef double (*sumarFunc)(double a, double b);
+
+        sumarFunc sumar = reinterpret_cast<sumarFunc>(GetProcAddress(mydll, "sumar"));
+        //
+        if (sumar != NULL)
+        {
+            std::cout << "prueba de suma :" << sumar(3.1416, 1.414);
+        }
+        else
+        {
+            puts("  Error en la operacion");
+        }
+
+        typedef std::string(*ConcatenarFunc)(const std::string& uno, const std::string& dos);
+        ConcatenarFunc concatenar = reinterpret_cast<ConcatenarFunc>(GetProcAddress(mydll, "Concatenar"));
+
+        if (concatenar != NULL)
+        {
+            std::cout << "  Resultado de concatenacion: " << concatenar("Hola, ", "mundo!") << "\n";
+        }
+        else
+        {
+            puts("  Error en la operacion");
+        }
+        FreeLibrary(mydll);
+
+
     }
     else
     {
-        puts("No se pudo cargar la DLL: )");
+        puts("  No se pudo cargar la DLL: )");
     }
     
     
